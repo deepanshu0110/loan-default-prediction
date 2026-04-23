@@ -408,15 +408,33 @@ print("  - Try the predict_loan_risk() function with different applicants")
 print("  - Experiment with different model parameters")
 print("  - Add SHAP analysis (install with: pip install shap)")
 print("=" * 80)
-import shap
+# ─── SHAP Explainability (optional — run after main()) ───────────────────────
+def run_shap_analysis(model, X_test):
+    """
+    Generate SHAP feature importance and force plot.
+    Run separately after training: run_shap_analysis(gb_model, X_test)
+    """
+    import shap
+    explainer = shap.TreeExplainer(model)
+    shap_values = explainer.shap_values(X_test)
 
-# Create SHAP explainer
-explainer = shap.TreeExplainer(gb_model)
-shap_values = explainer.shap_values(X_test)
+    # Global feature importance
+    shap.summary_plot(shap_values, X_test, plot_type="bar", show=False)
+    plt.savefig('shap_importance.png', dpi=300, bbox_inches='tight')
+    plt.close()
+    print("✓ SHAP importance plot saved to shap_importance.png")
 
-# Plot feature importance
-shap.summary_plot(shap_values, X_test, plot_type="bar")
-plt.savefig('shap_importance.png')
+    # Single prediction explanation (first test record)
+    shap.force_plot(
+        explainer.expected_value,
+        shap_values[0],
+        X_test.iloc[0],
+        matplotlib=True,
+        show=False
+    )
+    plt.savefig('shap_force_plot.png', dpi=300, bbox_inches='tight')
+    plt.close()
+    print("✓ SHAP force plot saved to shap_force_plot.png")
 
-# Explain single prediction
-shap.force_plot(explainer.expected_value, shap_values[0], X_test.iloc[0])
+# Uncomment to run SHAP analysis after training:
+# run_shap_analysis(gb_model, X_test)
