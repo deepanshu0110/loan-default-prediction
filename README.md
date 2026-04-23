@@ -1,4 +1,6 @@
 # Loan Default Prediction
+[![CI](https://github.com/deepanshu0110/loan-default-prediction/actions/workflows/ci.yml/badge.svg)](https://github.com/deepanshu0110/loan-default-prediction/actions)
+
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue?style=flat-square&logo=python)
 ![Scikit-learn](https://img.shields.io/badge/Scikit--learn-1.3-orange?style=flat-square)
