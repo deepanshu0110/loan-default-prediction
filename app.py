@@ -287,7 +287,7 @@ if model is not None:
         st.markdown("---")
         st.markdown("### 📊 Model Performance")
         if os.path.exists('model_evaluation.png'):
-            st.image('model_evaluation.png', use_container_width=True)
+            st.image('model_evaluation.png', use_column_width=True)  # streamlit 1.28 (pinned) has no use_container_width for st.image
         
         st.markdown("---")
         st.markdown("""
