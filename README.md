@@ -5,10 +5,12 @@
 ![Python](https://img.shields.io/badge/Python-3.8+-blue?style=flat-square&logo=python)
 ![Scikit-learn](https://img.shields.io/badge/Scikit--learn-1.3-orange?style=flat-square)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.28-red?style=flat-square&logo=streamlit)
-![ROC-AUC](https://img.shields.io/badge/ROC--AUC-0.88-brightgreen?style=flat-square)
+![Data](https://img.shields.io/badge/Data-synthetic-lightgrey?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
-Predicts loan default probability using borrower financial data. Gradient Boosting achieves 85% accuracy and ROC-AUC 0.88. Includes a Streamlit risk calculator with Approve / Review / Reject output.
+Predicts loan default probability from borrower financial data. Includes a Streamlit risk calculator with Approve / Review / Reject output.
+
+**Data note:** the 10,000 loan records are synthetic. `loan_prediction.py` generates them with a fixed seed (42) from a rule that links default to credit score, debt-to-income, loan-to-income and prior defaults. The scores below show how well each model recovers that rule, not performance on real lending data.
 
 ---
 
@@ -20,15 +22,19 @@ Lenders lose money on defaults and lose customers on false rejections. A risk sc
 
 ## Results
 
-| Model | Accuracy | ROC-AUC |
-|---|---|---|
-| Logistic Regression | 78% | 0.82 |
-| **Gradient Boosting** | **85%** | **0.88** |
+Test set: 2,000 records (stratified 80/20 split, seed 42).
 
-**Top Risk Factors:**
-- Credit score < 600 → 45% default rate
-- Loan-to-income > 0.5 → 38% default rate
-- Prior defaults > 0 → 52% default rate
+| Model | Accuracy | ROC-AUC | Average precision |
+|---|---|---|---|
+| Logistic Regression | 83% | 0.913 | 0.888 |
+| **Gradient Boosting** | **97%** | **0.998** | **0.997** |
+
+Gradient Boosting's near-perfect score is expected on synthetic data: the model learns the exact rule that generated the labels. On real loan data, expect much lower scores.
+
+**Default rate by risk factor** (overall default rate 41.3%):
+- Credit score < 600 → 76.4%
+- Loan-to-income > 0.5 → 60.3%
+- Prior defaults > 0 → 64.2%
 
 ---
 
@@ -38,7 +44,7 @@ Lenders lose money on defaults and lose customers on false rejections. A risk sc
 git clone https://github.com/deepanshu0110/loan-default-prediction.git
 cd loan-default-prediction
 python -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.txt   # pins matplotlib 3.7; newer versions break the boxplot call
 python loan_prediction.py   # generates data, trains, exports plots
 streamlit run app.py        # launches risk calculator
 ```
