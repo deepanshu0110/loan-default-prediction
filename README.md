@@ -57,6 +57,17 @@ Enter applicant details and get: default probability %, risk level (Low/Medium/H
 
 ---
 
+## Tests
+
+```bash
+pip install pytest
+pytest tests/ -v
+```
+
+The tests runs the full training script, checks both ROC-AUC scores and the synthetic data, and starts the Streamlit app. GitHub Actions runs them on every push.
+
+---
+
 ## Tech Stack
 
 Python · Pandas · NumPy · Scikit-learn · Matplotlib · Seaborn · Streamlit
